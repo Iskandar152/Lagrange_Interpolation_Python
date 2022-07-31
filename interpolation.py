@@ -11,9 +11,9 @@ def multiply(mat_1, mat_2):
     for i in range(0,diagonal_loc):
         for j in range(0,i + 1):
             result[i] += product[i - j,j]
-    for i in range (0,dimension,):
-        print(i)
-
+    for i in range(0,diagonal_loc - 1):
+        for j in range(0,diagonal_loc - i - 1):
+            result[diagonal_loc + i] += product[diagonal_loc - j - 1, j + 1 + i]
     print(dimension)
     print("Multiplying\n",mat_1)
     print("By\n", mat_2)
