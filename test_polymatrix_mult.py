@@ -13,13 +13,14 @@ import time
 import random
 import threading
 import os
+from numba import jit 
 def random_c_matrix_creator(size):
     rand_M = np.zeros(size, dtype = int) #Initializing matrix
 
     for i in range(0,size):
         rand_M[i] = random.randint(0,10)
     return rand_M
-
+@jit
 def no_thread_mult(mat_1,mat_2):
     product = np.matmul(mat_1,mat_2)         #Product of the two coefficient matrices
     diagonal_loc = product.shape[0]          #Steps to diagonal
@@ -33,7 +34,6 @@ def no_thread_mult(mat_1,mat_2):
             result[diagonal_loc + i] += product[diagonal_loc - j - 1, j + 1 + i]
 
     return result 
-
 
 def upper_calc(diagonal_loc,matrix,store):
     dimension = (diagonal_loc * 2) -1
@@ -54,12 +54,12 @@ def lower_calc(diagonal_loc, matrix,store):
     store.append(result)
 
 
-dimension = 10000
+dimension = 30000
 
 a = random_c_matrix_creator(dimension).reshape(1,dimension)
 b = random_c_matrix_creator(dimension).reshape(dimension,1)
 c = np.matmul(b,a)
-
+'''
 print("MULTITHREADING___________________")
 start_time = time.time()
 
@@ -73,11 +73,11 @@ t2.join()
 result = store[0] + store[1]
 print("Matrix mult took " , time.time() - start_time, "seconds")
 print(result)
-
+'''
 
 print("NON MULTI THREADING__________________________")
 start_time2 = time.time()
 non_thread_reuslt = no_thread_mult(b,a)
-print("Matrix mult took " , time.time() - start_time, "seconds")
-
+print("Matrix mult took " , time.time() - start_time2, "seconds")
+#numba.cuda.profile_stop()
 
